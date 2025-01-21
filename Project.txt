@@ -1,0 +1,245 @@
+		OSPF Router Alex
+Alex(config)#router ospf 10
+Alex(config-router)#net 10.0.0.0 0.255.255.255 ar 10
+Alex(config-router)#net 20.0.0.0 0.255.255.255 ar 10
+Alex(config-router)#do wr
+		DHCP Router Alex
+Alex(config)#service dhcp 
+Alex(config)#ip dhcp pool Afaq
+Alex(dhcp-config)#network 10.0.0.0 255.0.0.0
+Alex(dhcp-config)#default-router 10.0.0.100
+Alex(dhcp-config)#dns-server 10.0.0.100
+Alex(dhcp-config)#domain-name afaq.com
+Alex(config)#ip dhcp excluded-address 10.0.0.0 10.0.0.50
+
+		VLAN Router Alex
+Alex#conf t
+Alex(config)#vl 2
+Alex(config-vlan)#name
+Alex(config-vlan)#name HR
+Alex(config-vlan)#vl 3
+Alex(config-vlan)#name Account
+Alex(config-vlan)#vl 4
+Alex(config-vlan)#name Alex
+Alex(config-vlan)#vl 5
+Alex(config-vlan)#name Markting
+Alex(config-vlan)#vl 6
+Alex(config-vlan)#name Store
+Alex(config-vlan)#vl 7
+Alex(config-vlan)#name GM
+Alex(config-vlan)#vl 8
+Alex(config-vlan)#name MGM
+Alex(config)#vl 9
+Alex(config-vlan)#name Server
+Alex(config-vlan)#do wr
+Alex(config)#int range f0/1-3
+Alex(config-if-range)#switchport mode access 
+Alex(config-if-range)#sw acc vl 2
+Alex(config-if-range)#int range f0/4-8
+Alex(config-if-range)#sw mo acc
+Alex(config-if-range)#sw acc vl 3
+Alex(config-if-range)#int range f0/9-12
+Alex(config-if-range)#sw mo acc
+Alex(config-if-range)#sw acc vl 4
+Alex(config-if-range)#int range f0/13-15
+Alex(config-if-range)#sw mo acc
+Alex(config-if-range)#sw acc vl 5
+Alex(config-if-range)#int range f0/16-17
+Alex(config-if-range)#sw mo acc
+Alex(config-if-range)#sw acc vl 6
+Alex(config-if-range)#int f0/18
+Alex(config-if)#sw mo acc
+Alex(config-if)#sw acc vl 7
+Alex(config-if)#int f0/19
+Alex(config-if)#sw mo acc
+Alex(config-if)#sw acc vl 8
+Alex(config-if)#int range f0/20-23
+Alex(config-if-range)#sw mo acc
+Alex(config-if-range)#sw acc vl 9
+Alex(config-if-range)#do wr
+Alex(config-if-range)#do sh vl b
+
+Alex#conf t
+Alex(config)#int g0/0.2
+Alex(config-subif)#encapsulation dot1Q 2
+Alex(config-subif)#ip add 10.0.0.100 255.0.0.0
+Alex(config-subif)#int g0/0.3
+Alex(config-subif)#encapsulation dot1Q 3
+Alex(config-subif)#ip add 11.0.0.100 255.0.0.0
+Alex(config-subif)#int g0/0.4
+Alex(config-subif)#encapsulation dot1Q 4
+Alex(config-subif)#ip add 12.0.0.100 255.0.0.0
+Alex(config-subif)#int g0/0.5
+Alex(config-subif)#encapsulation dot1Q 5
+Alex(config-subif)#ip add 13.0.0.100 255.0.0.0
+Alex(config-subif)#int g0/0.6
+Alex(config-subif)#encapsulation dot1Q 6
+Alex(config-subif)#ip add 14.0.0.100 255.0.0.0
+Alex(config-subif)#int g0/0.7
+Alex(config-subif)#encapsulation dot1Q 7
+Alex(config-subif)#ip add 15.0.0.100 255.0.0.0
+Alex(config-subif)#int g0/0.8
+Alex(config-subif)#encapsulation dot1Q 8
+Alex(config-subif)#ip add 16.0.0.100 255.0.0.0
+Alex(config-subif)#int g0/0.9
+Alex(config-subif)#encapsulation dot1Q 9
+Alex(config-subif)#ip add 20.0.0.100 255.0.0.0
+Alex(config-subif)#do wr
+
+
+		ACL - EX Router Alex
+Alex>en
+Alex#conf t
+Alex(config)#acc 100 per icmp 40.0.0.0 0.0.0.31 host 10.0.0.80
+Alex(config)#
+Alex(config)#acc 100 deny ip 40.0.0.0 0.0.0.31 any
+Alex(config)#
+Alex(config)#acc 100 per tcp 40.0.0.32 0.0.0.31 host 10.0.0.55 eq 80
+Alex(config)#
+Alex(config)#acc 100 deny ip 40.0.0.32 0.0.0.31 any
+Alex(config)#
+Alex(config)#acc 100 per ip any 
+Alex(config)#int g0/0
+Alex(config-if)#ip acc 100 in
+Alex(config)#
+Alex(config-if)#do wr
+Alex(config-if)#do sh acc
+
+			work for trunk
+Alex(config)#int f0/24
+Alex(config-if)#switchport mode trunk 
+Alex(config-if)#do show vlan brief
+
+
+
+
+
+
+
+
+vl 2
+name
+name HR
+vl 3
+name Account
+vl 4
+name Alex
+vl 5
+name Markting
+vl 6
+name Store
+vl 7
+name GM
+vl 8
+name MGM
+int range f0/1-3
+switchport mode access 
+sw acc vl 2
+int range f0/4-8
+sw mo acc
+sw acc vl 3
+int range f0/9-12
+sw mo acc
+sw acc vl 4
+int range f0/13-15
+sw mo acc
+sw acc vl 5
+int range f0/16-17
+sw mo acc
+sw acc vl 6
+int f0/18
+sw mo acc
+sw acc vl 7
+int f0/19
+sw mo acc
+sw acc vl 8
+do wr
+do sh vl b
+
+int g0/0.2
+encapsulation dot1Q 2
+ip add 9.0.0.100 255.0.0.0
+int g0/0.3
+encapsulation dot1Q 3
+ip add 11.0.0.100 255.0.0.0
+int g0/0.4
+encapsulation dot1Q 4
+ip add 12.0.0.100 255.0.0.0
+int g0/0.5
+encapsulation dot1Q 5
+ip add 13.0.0.100 255.0.0.0
+int g0/0.6
+encapsulation dot1Q 6
+ip add 14.0.0.100 255.0.0.0
+int g0/0.7
+encapsulation dot1Q 7
+ip add 15.0.0.100 255.0.0.0
+int g0/0.8
+encapsulation dot1Q 8
+ip add 16.0.0.100 255.0.0.0
+do wr
+
+service dhcp 
+ip dhcp pool HR
+network 9.0.0.0 255.0.0.0
+default-router 9.0.0.100
+dns-server 9.0.0.100
+domain-name afaq.com
+ip dhcp excluded-address 9.0.0.0 9.0.0.50
+
+ip dhcp pool Account
+network 11.0.0.0 255.0.0.0
+default-router 11.0.0.100
+dns-server 11.0.0.100
+ip dhcp excluded-address 11.0.0.0 11.0.0.50
+
+ip dhcp pool Alex
+network 12.0.0.0 255.0.0.0
+default-router 12.0.0.100
+dns-server 12.0.0.100
+ip dhcp excluded-address 12.0.0.0 12.0.0.50
+
+ip dhcp pool Markting
+network 13.0.0.0 255.0.0.0
+default-router 13.0.0.100
+dns-server 13.0.0.100
+ip dhcp excluded-address 13.0.0.0 13.0.0.50
+
+ip dhcp pool Store
+network 14.0.0.0 255.0.0.0
+default-router 14.0.0.100
+dns-server 14.0.0.100
+ip dhcp excluded-address 14.0.0.0 14.0.0.50
+
+ip dhcp pool GM
+network 15.0.0.0 255.0.0.0
+default-router 15.0.0.100
+dns-server 15.0.0.100
+ip dhcp excluded-address 15.0.0.0 15.0.0.50
+
+ip dhcp pool MGM
+network 16.0.0.0 255.0.0.0
+default-router 16.0.0.100
+dns-server 16.0.0.100
+ip dhcp excluded-address 16.0.0.0 16.0.0.50
+
+
+
+
+			ACL - EX
+
+acc 100 per icmp 40.0.0.0 0.0.0.31 host 10.0.0.80
+
+acc 100 deny ip 40.0.0.0 0.0.0.31 any
+
+acc 100 per tcp 40.0.0.32 0.0.0.31 host 10.0.0.55 eq 80
+
+acc 100 deny ip 40.0.0.32 0.0.0.31 any
+
+acc 100 per ip any 
+
+int g0/0
+ip acc 100 in
+
+do wr
+do sh acc
